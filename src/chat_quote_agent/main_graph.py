@@ -15,8 +15,8 @@ from .state import GraphState
 def build_main_graph():
     graph = StateGraph(GraphState)
 
-    # understand (LLM tool): text -> conditions list
-    def understand(state: GraphState) -> dict[str, Any]:
+    # medical_summary (LLM tool): text -> conditions list
+    def medical_summary(state: GraphState) -> dict[str, Any]:
         return {}
 
     # specialists: the fact extraction loop (extract -> publish)
@@ -35,7 +35,7 @@ def build_main_graph():
     def respond(state: GraphState) -> dict[str, Any]:
         return {}
 
-    graph.add_node("understand", understand)
+    graph.add_node("medical_summary", medical_summary)
     graph.add_node("route", route)
     graph.add_node("consult", consult)
     graph.add_node("rate", rate)
@@ -43,8 +43,8 @@ def build_main_graph():
     graph.add_node("respond", respond)
 
     # happy path
-    graph.add_edge(START, "understand")
-    graph.add_edge("understand", "route")
+    graph.add_edge(START, "medical_summary")
+    graph.add_edge("medical_summary", "route")
     graph.add_edge("route", "consult")
     graph.add_edge("consult", "rate")
     graph.add_edge("rate", "final_decision")
@@ -54,7 +54,7 @@ def build_main_graph():
     # TODO(value-normalize): gate between route and consult
     #   probe -> END (protect/human review); questions -> respond (ask)
     # TODO(main-flow): missing-field check after consult -> respond (ask)
-    # TODO(main-flow): check_more_info gate -> re-enter understand (YES) | rate (NO)
+    # TODO(main-flow): check_more_info gate -> re-enter medical_summary (YES) | rate (NO)
     # TODO(main-flow): follow-up guard at turn start -> END (protect)
 
     serde = JsonPlusSerializer(

@@ -12,5 +12,8 @@ install:
 test:
 	$(VENV)/bin/python -m pytest
 
+graph:
+	 $(VENV)/bin/python -m chat_quote_agent.main_graph
+
 clean:
 	rm -rf .pytest_cache src/*.egg-info
